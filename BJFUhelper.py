@@ -100,10 +100,10 @@ class newjwxt(object):
         # print(info)
         return info
 
-    def get_classes(self, weekday):
+    def get_classes(self, delta, weekday):
         localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
+        # delta = int(
+        #     (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
         courses = {}
         cur_courses = {}
         t = 0
@@ -195,12 +195,14 @@ def del_command(bot, update):
 def dailyclass_command(bot, update):
     chat_id = update.message.chat_id
     localtime = time.localtime()
+    delta = int(
+        (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
     weekday = Weekday[time.strftime("%a")]
     try:
         s = ''
         new = newjwxt()
         new.login(chat_id)
-        dic = new.get_classes(weekday)
+        dic = new.get_classes(delta, weekday)
         if dic == {}:
             bot.send_message(chat_id=chat_id, text="今天没有课!")
         elif dic != {}:
@@ -236,7 +238,7 @@ def thisweek_command(bot, update):
             s = ''
             new = newjwxt()
             new.login(chat_id)
-            dic = new.get_classes(weekday)
+            dic = new.get_classes(delta, weekday)
             if dic == {}:
                 s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
                 S = S+s
@@ -259,18 +261,24 @@ def thisweek_command(bot, update):
 def tomorrowclass_command(bot, update):
     chat_id = update.message.chat_id
     localtime = time.localtime()
+    delta = int(
+        (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
     weekday = Weekday[time.strftime("%a")]
     weekday = str(int(weekday.split('-')[0])+1)+'-2'
+    if (time.strftime("%a") == "Sun"):
+        weekday = "1-2"
+        delta = delta+1
     try:
         s = ''
         new = newjwxt()
         new.login(chat_id)
-        dic = new.get_classes(weekday)
+        dic = new.get_classes(delta, weekday)
         if dic == {}:
             bot.send_message(chat_id=chat_id, text="明天没有课!")
         elif dic != {}:
             # print(dic)
             dic = list(dic.values())
+            # print (dic)
             for i in dic:
                 s = s+i+'\n'
             # print(s)
