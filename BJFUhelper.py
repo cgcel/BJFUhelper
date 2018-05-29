@@ -258,6 +258,41 @@ def thisweek_command(bot, update):
     bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=S)
 
 
+def nextweek_command(bot, update):
+    localtime = time.localtime()
+    delta = int(
+        (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+2)
+    chat_id = update.message.chat_id
+    S = ''
+    # bot.send_message(chat_id=chat_id,text="查询中,请稍等...")
+    message_id = bot.send_message(
+        chat_id=chat_id, text="查询中,请稍等...").message_id
+    for num in range(1, 8):
+        weekday = Weekday_num[str(num)]
+        try:
+            s = ''
+            new = newjwxt()
+            new.login(chat_id)
+            dic = new.get_classes(delta, weekday)
+            if dic == {}:
+                s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
+                S = S+s
+                # bot.send_message(chat_id=chat_id, text=s)
+            elif dic != {}:
+                dic = list(dic.values())
+                S = S+weekday_alpha[str(num)]+'\n'
+                # s = s+'\n'
+                for i in dic:
+                    S = S+i+'\n'
+                    # S=S+s
+                # bot.send_message(chat_id=chat_id,
+                #                  text=s)
+        except:
+            bot.edit_message_text(
+                chat_id=chat_id, message_id=message_id, text="获取失败 /help")
+    bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=S)
+
+
 def tomorrowclass_command(bot, update):
     chat_id = update.message.chat_id
     localtime = time.localtime()
@@ -302,6 +337,7 @@ def main():
     dispatcher.add_handler(CommandHandler('del', del_command))
     dispatcher.add_handler(CommandHandler('class', dailyclass_command))
     dispatcher.add_handler(CommandHandler('thisweek', thisweek_command))
+    dispatcher.add_handler(CommandHandler('nextweek',nextweek_command))
     dispatcher.add_handler(CommandHandler('tomorrow', tomorrowclass_command))
     dispatcher.add_handler(CommandHandler('week', get_week_num))
 
