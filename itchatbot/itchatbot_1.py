@@ -183,12 +183,9 @@ def text_reply(msg):
             if dic == {}:
                 return "明天没有课!"
             elif dic != {}:
-                # print(dic)
                 dic = list(dic.values())
-                # print (dic)
                 for i in dic:
                     s = s+i+'\n'
-                # print(s)
                 return "明日课程:\n"+s
         except:
             return "获取失败,请先登录 /help"
@@ -216,11 +213,9 @@ def text_reply(msg):
                 if dic == {}:
                     s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
                     S = S+s
-                    # bot.send_message(chat_id=chat_id, text=s)
                 elif dic != {}:
                     dic = list(dic.values())
                     S = S+weekday_alpha[str(num)]+'\n'
-                    # s = s+'\n'
                     for i in dic:
                         S = S+i+'\n'
             return S
@@ -244,11 +239,9 @@ def text_reply(msg):
                 if dic == {}:
                     s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
                     S = S+s
-                    # bot.send_message(chat_id=chat_id, text=s)
                 elif dic != {}:
                     dic = list(dic.values())
                     S = S+weekday_alpha[str(num)]+'\n'
-                    # s = s+'\n'
                     for i in dic:
                         S = S+i+'\n'
             return S
@@ -264,7 +257,7 @@ def text_reply(msg):
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)  # isGroupChat=True
 def text_reply(msg):
 
-    # if '/help' in msg['Text']:
+    # if 'help' in msg['Text']:
     #     text = '使用说明:\n查快递: kd <快递单号>\n查天气: today <城市> | later <城市>\n查wca信息: wca <姓名/wcaid>'
     #     return text+msg.
 

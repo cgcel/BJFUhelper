@@ -19,17 +19,13 @@ class Tuling(object):
         soup = bs(r.content, 'html.parser')
         jsondata = json.loads(soup.get_text())
         # print(jsondata)
-        data=''
+        data = ''
         try:
-            data=data+jsondata['text']
+            data = data+jsondata['text']
         except:
             pass
         try:
-            data=data+jsondata['url']
+            data = data+jsondata['url']
         except:
             pass
         return data
-
-
-# if __name__ == '__main__':
-#     Tuling().getmsg('北京林业大学公交去中发')
