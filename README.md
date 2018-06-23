@@ -30,6 +30,7 @@ Telegram id: `@bjfuhelper_bot`<br>
 - 查询天气: today `城市` | later `城市`<br>
 - 查询wca选手信息: wca `姓名|WCAID`<br>
 
+> 微信封号频繁, 暂时停止更新Wechat bot
 
 ## 账号密码保存方式:
 
