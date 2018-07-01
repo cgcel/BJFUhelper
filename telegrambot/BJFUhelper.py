@@ -3,12 +3,15 @@
 
 import requests
 import time
+import datetime
 import telegram
 import logging
 from bs4 import BeautifulSoup
 from telegram.ext import CommandHandler, Updater, MessageHandler
 from NewjwxtInfo import newjwxt, Weekday, Weekday_num, weekday_alpha, class_num, num, user_data
 from config import TOKEN, START_TIME
+
+starttime = datetime.datetime(START_TIME[0], START_TIME[1], START_TIME[2])
 
 
 def help_command(bot, update):
@@ -49,9 +52,9 @@ def del_command(bot, update):
 def dailyclass_command(bot, update):
     # 获取当日课表
     chat_id = update.message.chat_id
-    localtime = time.localtime()
-    delta = int(
-        (((localtime[1]-START_TIME[1])*30+(localtime[2]-START_TIME[2]))/7)+1)
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)
+
     weekday = Weekday[time.strftime("%a")]
     try:
         s = ''
@@ -71,20 +74,18 @@ def dailyclass_command(bot, update):
 
 
 def get_week_num(bot, update):
-    localtime = time.localtime()
-    delta = int(
-        (((localtime[1]-START_TIME[1])*30+(localtime[2]-START_TIME[2]))/7)+1)
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)
     bot.send_message(chat_id=update.message.chat_id,
                      text="本周为第"+repr(delta)+"周")
 
 
 def thisweek_command(bot, update):
-    localtime = time.localtime()
-    delta = int(
-        (((localtime[1]-START_TIME[1])*30+(localtime[2]-START_TIME[2]))/7)+1)
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)
+    
     chat_id = update.message.chat_id
     S = ''
-    # bot.send_message(chat_id=chat_id,text="查询中,请稍等...")
     message_id = bot.send_message(
         chat_id=chat_id, text="查询中,请稍等...").message_id
     for num in range(1, 8):
@@ -114,12 +115,11 @@ def thisweek_command(bot, update):
 
 
 def nextweek_command(bot, update):
-    localtime = time.localtime()
-    delta = int(
-        (((localtime[1]-START_TIME[1])*30+(localtime[2]-START_TIME[2]))/7)+2)
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)+1
+
     chat_id = update.message.chat_id
     S = ''
-    # bot.send_message(chat_id=chat_id,text="查询中,请稍等...")
     message_id = bot.send_message(
         chat_id=chat_id, text="查询中,请稍等...").message_id
     for num in range(1, 8):
@@ -150,9 +150,9 @@ def nextweek_command(bot, update):
 
 def tomorrowclass_command(bot, update):
     chat_id = update.message.chat_id
-    localtime = time.localtime()
-    delta = int(
-        (((localtime[1]-START_TIME[1])*30+(localtime[2]-START_TIME[2]))/7)+1)
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)
+
     weekday = Weekday[time.strftime("%a")]
     weekday = str(int(weekday.split('-')[0])+1)+'-2'
     if (time.strftime("%a") == "Sun"):
