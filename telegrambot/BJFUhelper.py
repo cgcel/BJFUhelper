@@ -49,11 +49,18 @@ def del_command(bot, update):
     bot.send_message(chat_id=chat_id, text="数据已删除")
 
 
+def get_week_num(bot, update):
+    localtime = datetime.datetime.today()
+    delta = int(((localtime-starttime).days-1)/7)+1
+    bot.send_message(chat_id=update.message.chat_id,
+                     text="本周为第"+repr(delta)+"周")
+
+
 def dailyclass_command(bot, update):
     # 获取当日课表
     chat_id = update.message.chat_id
     localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)
+    delta = int(((localtime-starttime).days-1)/7)+1
 
     weekday = Weekday[time.strftime("%a")]
     try:
@@ -73,17 +80,10 @@ def dailyclass_command(bot, update):
         bot.send_message(chat_id=chat_id, text="获取失败,请先登录 /help")
 
 
-def get_week_num(bot, update):
-    localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)
-    bot.send_message(chat_id=update.message.chat_id,
-                     text="本周为第"+repr(delta)+"周")
-
-
 def thisweek_command(bot, update):
     localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)
-    
+    delta = int(((localtime-starttime).days-1)/7)+1
+
     chat_id = update.message.chat_id
     S = ''
     message_id = bot.send_message(
@@ -116,7 +116,7 @@ def thisweek_command(bot, update):
 
 def nextweek_command(bot, update):
     localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)+1
+    delta = int(((localtime-starttime).days-1)/7)+2
 
     chat_id = update.message.chat_id
     S = ''
@@ -151,7 +151,7 @@ def nextweek_command(bot, update):
 def tomorrowclass_command(bot, update):
     chat_id = update.message.chat_id
     localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)
+    delta = int(((localtime-starttime).days-1)/7)+1
 
     weekday = Weekday[time.strftime("%a")]
     weekday = str(int(weekday.split('-')[0])+1)+'-2'

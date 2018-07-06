@@ -46,6 +46,10 @@ class kuaidi():
 
     def plusgetinfo(self, comcode, num):
         self.num = num
+        # self.param = {
+        #     'resultv2': '1',
+        #     'text': self.num
+        # }
         resp2 = self.session.get(url_info+comcode+'&postid=' + str(num))
         soup = bs(resp2.content, "html.parser")
         jsondata = json.loads(soup.get_text())
@@ -57,3 +61,8 @@ class kuaidi():
         text = "单号: "+num+'\n' + "更新时间: " + \
             packageinfo[0]['time']+'\n' + "动态: " + packageinfo[0]['context']
         return text
+
+
+# if __name__ == '__main__':
+#     kd = kuaidi()
+#     print(kd.package('000'))

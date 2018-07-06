@@ -56,8 +56,8 @@ class WCA(object):
         link = WCA().get_url(name)
         url = url_get+link
         # print(url)
-        info = ""
-        text = ""
+        info=""
+        text=""
         r = self.session.get(url)
         soup = bs(r.content, 'html.parser')
         # print(soup.prettify())
@@ -68,18 +68,21 @@ class WCA(object):
         wcaid = data[3].get_text().strip()
         sex = data[4].get_text().strip()
         experience = data[5].get_text().strip()
-        info = "姓名:{}\nID:{}\n".format(name, wcaid)
+        info="姓名:{}\nID:{}\n".format(name,wcaid)
         for part in list(dict_type.keys()):
             try:
                 pb = soup.find_all(
                     "a", {"href": "/results/rankings?event="+part+"&region=China"})[0].get_text().strip()
                 avg = soup.find_all(
                     "a", {"href": "/results/rankings?event="+part+"&type=average&region=China"})[0].get_text().strip()
-                if len(avg) == 0:
-                    text = text+dict_type[part]+': '+pb+'[best]\n'
+                if len(avg)==0:
+                    text=text+dict_type[part]+': '+pb+'[best]\n'
                 else:
-                    text = text+dict_type[part]+': ' + \
-                        pb + '[best] '+avg+'[avg]\n'
+                    text = text+dict_type[part]+': '+pb + '[best] '+avg+'[avg]\n'
             except:
                 pass
         return info+text
+
+if __name__ == '__main__':
+    text = WCA().get_info('尹建桦')
+    print(text)

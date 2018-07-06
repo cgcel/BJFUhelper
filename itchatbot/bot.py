@@ -4,6 +4,7 @@
 import itchat
 import requests
 import time
+import datetime
 from itchat.content import *
 from getpackagesinfo import kuaidi
 from getweatherinfo import Weather
@@ -13,7 +14,9 @@ from wcainfo import WCA
 
 user_data = {}
 
-starttime = [2018, 3, 4]
+# starttime = [2018, 3, 4]
+starttime = datetime.datetime(2018, 3, 4)
+
 
 num = {
     "1": "DCE888360E8F4C2587C7EA77AEF8984D-",
@@ -144,9 +147,8 @@ def text_reply(msg):
 
     if 'class' in msg['Text']:
         chat_id = msg.fromUserName
-        localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
+        localtime = datetime.datetime.today()
+        delta = int(((localtime-starttime).days-1)/7)+1
         weekday = Weekday[time.strftime("%a")]
         try:
             s = ''
@@ -166,9 +168,8 @@ def text_reply(msg):
 
     if 'tomorrow' in msg['Text']:
         chat_id = msg.fromUserName
-        localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
+        localtime = datetime.datetime.today()
+        delta = int(((localtime-starttime).days-1)/7)+1
         weekday = Weekday[time.strftime("%a")]
         weekday = str(int(weekday.split('-')[0])+1)+'-2'
         if (time.strftime("%a") == "Sun"):
@@ -183,23 +184,24 @@ def text_reply(msg):
             if dic == {}:
                 return "明天没有课!"
             elif dic != {}:
+                # print(dic)
                 dic = list(dic.values())
+                # print (dic)
                 for i in dic:
                     s = s+i+'\n'
+                # print(s)
                 return "明日课程:\n"+s
         except:
             return "获取失败,请先登录 /help"
 
     if 'weeknum' in msg['Text']:
-        localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
+        localtime = datetime.datetime.today()
+        delta = int(((localtime-starttime).days-1)/7)+1
         return "本周为第"+repr(delta)+"周"
 
     if 'thisweek' in msg['Text']:
-        localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+1)
+        localtime = datetime.datetime.today()
+        delta = int(((localtime-starttime).days-1)/7)+1
         chat_id = msg.fromUserName
         S = ''
         try:
@@ -213,9 +215,11 @@ def text_reply(msg):
                 if dic == {}:
                     s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
                     S = S+s
+                    # bot.send_message(chat_id=chat_id, text=s)
                 elif dic != {}:
                     dic = list(dic.values())
                     S = S+weekday_alpha[str(num)]+'\n'
+                    # s = s+'\n'
                     for i in dic:
                         S = S+i+'\n'
             return S
@@ -223,9 +227,8 @@ def text_reply(msg):
             return "获取失败 /help"
 
     if 'nextweek' in msg['Text']:
-        localtime = time.localtime()
-        delta = int(
-            (((localtime[1]-starttime[1])*30+(localtime[2]-starttime[2]))/7)+2)
+        localtime = datetime.datetime.today()
+        delta = int(((localtime-starttime).days-1)/7)+2
         chat_id = msg.fromUserName
         S = ''
         try:
@@ -239,9 +242,11 @@ def text_reply(msg):
                 if dic == {}:
                     s = s+weekday_alpha[str(num)]+'\n'+"没有课"+'\n'
                     S = S+s
+                    # bot.send_message(chat_id=chat_id, text=s)
                 elif dic != {}:
                     dic = list(dic.values())
                     S = S+weekday_alpha[str(num)]+'\n'
+                    # s = s+'\n'
                     for i in dic:
                         S = S+i+'\n'
             return S
@@ -257,7 +262,7 @@ def text_reply(msg):
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)  # isGroupChat=True
 def text_reply(msg):
 
-    # if 'help' in msg['Text']:
+    # if '/help' in msg['Text']:
     #     text = '使用说明:\n查快递: kd <快递单号>\n查天气: today <城市> | later <城市>\n查wca信息: wca <姓名/wcaid>'
     #     return text+msg.
 
