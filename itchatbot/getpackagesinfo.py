@@ -3,7 +3,6 @@
 
 import requests
 import json
-from bs4 import BeautifulSoup as bs
 
 url_main = 'http://www.kuaidi100.com/autonumber/autoComNum?resultv2=1&text='
 url_info = 'http://www.kuaidi100.com/query?type='
@@ -33,36 +32,28 @@ class kuaidi():
             'text': self.num
         }
         resp1 = self.session.post(url_main+self.num, params=self.param)
-        soup = bs(resp1.content, "html.parser")
-        jsondata = json.loads(soup.get_text())
+        jsondata = json.loads(resp1.content)
         self.comcode = jsondata['auto'][0]['comCode']
         resp2 = self.session.get(url_info+self.comcode+'&postid='+self.num)
-        info = bs(resp2.content, "html.parser")
-        packagedata = json.loads(info.get_text())
-        packageinfo = packagedata['data']
-        text = "单号: "+num+'\n' + "更新时间: " + \
-            packageinfo[0]['time']+'\n' + "动态: " + packageinfo[0]['context']
-        return text
+        packagedata = json.loads(resp2.content)
+        if packagedata['message'] != "ok":
+            text = packagedata["message"]
+            return text
+        elif packagedata['message'] == "ok":
+            packageinfo = packagedata['data']
+            text = "单号: {}\n公司: {}\n更新时间: {}\n动态: {}".format(
+                num, packagedata['com'], packageinfo[0]['time'], packageinfo[0]['context'])
+            return text
 
     def plusgetinfo(self, comcode, num):
         self.num = num
-        # self.param = {
-        #     'resultv2': '1',
-        #     'text': self.num
-        # }
         resp2 = self.session.get(url_info+comcode+'&postid=' + str(num))
-        soup = bs(resp2.content, "html.parser")
-        jsondata = json.loads(soup.get_text())
-        self.comcode = jsondata['auto'][0]['comCode']
-        resp2 = self.session.get(url_info+self.comcode+'&postid='+self.num)
-        info = bs(resp2.content, "html.parser")
-        packagedata = json.loads(info.get_text())
-        packageinfo = packagedata['data']
-        text = "单号: "+num+'\n' + "更新时间: " + \
-            packageinfo[0]['time']+'\n' + "动态: " + packageinfo[0]['context']
-        return text
-
-
-# if __name__ == '__main__':
-#     kd = kuaidi()
-#     print(kd.package('000'))
+        packagedata = json.loads(resp2.content)
+        if packagedata['message'] != "ok":
+            text = packagedata["message"]
+            return text
+        elif packagedata['message'] == "ok":
+            packageinfo = packagedata['data']
+            text = "单号: {}\n公司: {}\n更新时间: {}\n动态: {}".format(
+                num, packagedata['com'], packageinfo[0]['time'], packageinfo[0]['context'])
+            return text
