@@ -55,3 +55,9 @@ class qqLogin():
             s = s+act+'\n'
             # print(act)
         return s
+
+
+if __name__ == '__main__':
+    qq = qqLogin()
+    qq.login()
+    print(qq.get_info())
