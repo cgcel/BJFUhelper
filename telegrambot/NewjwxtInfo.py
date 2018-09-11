@@ -144,3 +144,13 @@ class newjwxt(object):
             if str(delta) in key:
                 cur_courses[key] = courses[key]
         return cur_courses
+
+    def get_extracourses(self):
+        r = self.session.get(url_classes)
+        soup = bs(r.content, "html.parser")
+        try:
+            result = soup.find(
+                "td", {"colspan": "7", "align": "left", "style": "color: red;"})
+            return result.text
+        except:
+            return "无安排"

@@ -16,8 +16,8 @@ starttime = datetime.datetime(START_TIME[0], START_TIME[1], START_TIME[2])
 
 
 def help_command(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='使用方法:\n' +
-                     '登录教务系统(登录一次即可):\n'+'/regist <学号> <密码>\n'+'退出登录: /del\n'+'当日课表: /class\n'+'明日课表: /tomorrow\n'+'本周课表: /thisweek\n'+'下周课表: /nextweek\n'+'查看周数: /week\n'+'查看帮助: /help')
+    bot.send_message(chat_id=update.message.chat_id,
+                     text='使用方法:\n登录教务系统(登录一次即可):\n/regist <学号> <密码>\n退出登录: /del\n当日课表: /class\n明日课表: /tomorrow\n本周课表: /thisweek\n下周课表: /nextweek\n查看周数: /week\n查看实验实习安排: /extracourse\n查看帮助: /help')
 
 
 def regist_command(bot, update):
@@ -190,6 +190,18 @@ def tomorrowclass_command(bot, update):
 #         bot.send_message(chat_id=chat_id, text="Error, try again please.")
 
 
+def extracourse_command(bot, update):
+    # 获取当日课表
+    chat_id = update.message.chat_id
+    try:
+        new = newjwxt()
+        new.login(chat_id)
+        text = new.get_extracourses()
+        update.message.reply_text("实验实习安排:\n{}".format(text))
+    except:
+        bot.send_message(chat_id=chat_id, text="获取失败,请先登录 /help")
+
+
 def main():
     updater = Updater(TOKEN)
     dispatcher = updater.dispatcher
@@ -208,6 +220,7 @@ def main():
     dispatcher.add_handler(CommandHandler('tomorrow', tomorrowclass_command))
     dispatcher.add_handler(CommandHandler('week', get_week_num))
     # dispatcher.add_handler(CommandHandler('qqact', qqact_command))
+    dispatcher.add_handler(CommandHandler('extracourse', extracourse_command))
 
     updater.start_polling()
     updater.idle()
