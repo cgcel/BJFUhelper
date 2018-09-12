@@ -12,13 +12,14 @@ url_login = 'http://newjwxt.bjfu.edu.cn/jsxsd/xk/LoginToXk'  # POST
 url_classes = 'http://newjwxt.bjfu.edu.cn/jsxsd/xskb/xskb_list.do?Ves632DSdyV=NEW_XSD_PYGL'
 
 num = {
-    "1": "F6EBEDA273684E0E8C279B052110493E-",
-    "2": "901DA391778C45EFBB20ED21186C64DA-",
-    "3": "7944FA120D354BB78F8E8235A1426640-",
-    "4": "BD68B87447F84DDDA93A7838E9BD582A-",
-    "5": "7CA568FE8A7E435DA4F126BE3DCA29C5-",
-    "6": "B939AB7EA3A7406BB191A3F46EDB9B19-",
-    "7": "B37542CECDFB4C2EAEFB4A6216942A46-"
+    "1": "",
+    "2": "",
+    "3": "",
+    "4": "",
+    "5": "",
+    "6": "",
+    "7": ""
+
 }
 
 Weekday = {
@@ -90,10 +91,14 @@ class newjwxt(object):
         return self.session.get(url_main).status_code
 
     def info(self, chat_id):
-        r = self.session.get(url_main)
+        r = self.session.get(url_classes)
         soup = bs(r.content, "html.parser")
         basic_info = soup.find_all("div", {"class": "Nsb_top_menu_nc"})
         info = basic_info[0].text.strip()
+        result = soup.find_all('div', {'class': 'kbcontent'})
+        for i in range(0, 7):
+            num[str(i+1)] = result[i*7]['id'].split('-')[0]+'-'
+
         return info
 
     def get_classes(self, delta, weekday):
@@ -149,8 +154,11 @@ class newjwxt(object):
         r = self.session.get(url_classes)
         soup = bs(r.content, "html.parser")
         try:
+            info = ''
             result = soup.find(
                 "td", {"colspan": "7", "align": "left", "style": "color: red;"})
-            return result.text
+            for part in result.text.split(';'):
+                info = info+part+'\n'
+            return info
         except:
             return "无安排"
