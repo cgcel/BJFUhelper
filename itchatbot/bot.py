@@ -148,7 +148,7 @@ def text_reply(msg):
     if 'class' in msg['Text']:
         chat_id = msg.fromUserName
         localtime = datetime.datetime.today()
-        delta = int(((localtime-starttime).days-1)/7)+1
+        delta = int((localtime-starttime).days/7+1)
         weekday = Weekday[time.strftime("%a")]
         try:
             s = ''
@@ -169,7 +169,7 @@ def text_reply(msg):
     if 'tomorrow' in msg['Text']:
         chat_id = msg.fromUserName
         localtime = datetime.datetime.today()
-        delta = int(((localtime-starttime).days-1)/7)+1
+        delta = int((localtime-starttime).days/7+1)
         weekday = Weekday[time.strftime("%a")]
         weekday = str(int(weekday.split('-')[0])+1)+'-2'
         if (time.strftime("%a") == "Sun"):
@@ -196,12 +196,12 @@ def text_reply(msg):
 
     if 'weeknum' in msg['Text']:
         localtime = datetime.datetime.today()
-        delta = int(((localtime-starttime).days-1)/7)+1
+        delta = int((localtime-starttime).days/7+1)
         return "本周为第"+repr(delta)+"周"
 
     if 'thisweek' in msg['Text']:
         localtime = datetime.datetime.today()
-        delta = int(((localtime-starttime).days-1)/7)+1
+        delta = int((localtime-starttime).days/7+1)
         chat_id = msg.fromUserName
         S = ''
         try:
