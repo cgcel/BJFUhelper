@@ -61,7 +61,7 @@ def dailyclass_command(bot, update):
     # 获取当日课表
     chat_id = update.message.chat_id
     localtime = datetime.datetime.today()
-    delta = int(((localtime-starttime).days-1)/7)+1
+    delta = int((localtime-starttime).days/7+1)
 
     weekday = Weekday[time.strftime("%a")]
     try:
