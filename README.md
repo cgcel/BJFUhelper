@@ -25,6 +25,7 @@ Telegram id: `@bjfuhelper_bot`
 - 退出登录: `/del`
 - 查看二课堂活动 (测试功能): `/qqact`
 - 查看实验实习安排: `/extracourse`
+- 一键评教: `/evaluate`
 
 ## Wechat bot 功能及用法:
 
