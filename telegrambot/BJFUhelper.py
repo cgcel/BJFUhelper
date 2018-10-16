@@ -18,7 +18,7 @@ starttime = datetime.datetime(START_TIME[0], START_TIME[1], START_TIME[2])
 
 def help_command(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text='使用方法:\n登录教务系统(登录一次即可):\n/login <学号> <密码>\n退出登录: /logout\n当日课表: /today\n明日课表: /tomorrow\n本周课表: /thisweek\n下周课表: /nextweek\n查看周数: /week\n查看实验实习安排: /extracourse\n一键评教: /evaluate\n查看帮助: /help')
+                     text='使用方法:\n登录教务系统(登录一次即可):\n/login <学号> <密码>\n退出登录: /logout\n当日课表: /today\n明日课表: /tomorrow\n本周课表: /thisweek\n下周课表: /nextweek\n查看周数: /week\n查看实验实习安排: /extracourse\n查看帮助: /help\n测试功能:\n一键评教: /evaluate\n查看二课堂: /qqact')
 
 
 def login_command(bot, update):
@@ -179,7 +179,7 @@ def tomorrowclass_command(bot, update):
     except:
         bot.send_message(chat_id=chat_id, text="获取失败,请先登录 /help")
 
-# 实验性功能
+# 测试功能
 # def qqact_command(bot, update):
 #     chat_id = update.message.chat_id
 #     try:
@@ -203,13 +203,14 @@ def extracourse_command(bot, update):
         bot.send_message(chat_id=chat_id, text="获取失败,请先登录 /help")
 
 
-def evaluate_command(bot, update):
-    chat_id = update.message.chat_id
-    try:
-        result = JXPJ(chat_id).evaluate()
-        update.message.reply_text(result)
-    except:
-        update.message.reply_text("操作失败, 请重试")
+# 测试功能
+# def evaluate_command(bot, update):
+#     chat_id = update.message.chat_id
+#     try:
+#         result = JXPJ(chat_id).evaluate()
+#         update.message.reply_text(result)
+#     except:
+#         update.message.reply_text("操作失败, 请重试")
 
 
 
@@ -232,7 +233,7 @@ def main():
     dispatcher.add_handler(CommandHandler('week', get_week_num))
     # dispatcher.add_handler(CommandHandler('qqact', qqact_command))
     dispatcher.add_handler(CommandHandler('extracourse', extracourse_command))
-    dispatcher.add_handler(CommandHandler('evaluate', evaluate_command))
+    # dispatcher.add_handler(CommandHandler('evaluate', evaluate_command))
 
     updater.start_polling()
     updater.idle()

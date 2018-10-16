@@ -45,7 +45,7 @@ class JXPJ(object):
             soup = bs(r.content, 'html.parser')
             result = soup.find_all("input", {"type": "hidden"})
             part1 = result[1:11]
-            formdata['issubmit'] = 1  # part1[0]['value']
+            formdata['issubmit'] = 0  # 0--保存 1--提交
             for part in part1:
                 formdata[part['name']] = part['value']
             for part in result[11:]:
