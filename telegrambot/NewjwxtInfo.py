@@ -88,7 +88,8 @@ class newjwxt(object):
             'PASSWORD': user_data[chat_id][1]
         }
         self.session.post(url_login, data=postdata)
-        return self.session.get(url_main).status_code
+        # return self.session.get(url_main).status_code
+        return self.session
 
     def info(self, chat_id):
         r = self.session.get(url_classes)

@@ -9,6 +9,7 @@ import logging
 from bs4 import BeautifulSoup
 from telegram.ext import CommandHandler, Updater, MessageHandler
 from NewjwxtInfo import newjwxt, Weekday, Weekday_num, weekday_alpha, class_num, num, user_data
+from pingjiao import JXPJ
 # from qq_login import qqLogin
 from config import TOKEN, START_TIME
 
@@ -17,10 +18,10 @@ starttime = datetime.datetime(START_TIME[0], START_TIME[1], START_TIME[2])
 
 def help_command(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text='使用方法:\n登录教务系统(登录一次即可):\n/regist <学号> <密码>\n退出登录: /del\n当日课表: /class\n明日课表: /tomorrow\n本周课表: /thisweek\n下周课表: /nextweek\n查看周数: /week\n查看实验实习安排: /extracourse\n查看帮助: /help')
+                     text='使用方法:\n登录教务系统(登录一次即可):\n/login <学号> <密码>\n退出登录: /logout\n当日课表: /today\n明日课表: /tomorrow\n本周课表: /thisweek\n下周课表: /nextweek\n查看周数: /week\n查看实验实习安排: /extracourse\n一键评教: /evaluate\n查看帮助: /help')
 
 
-def regist_command(bot, update):
+def login_command(bot, update):
     chat_id = update.message.chat_id
     b = ''
     c = ''
@@ -43,7 +44,7 @@ def regist_command(bot, update):
         bot.send_message(chat_id=chat_id, text="登录失败,请检查账密 /help")
 
 
-def del_command(bot, update):
+def logout_command(bot, update):
     # 删除登录信息
     chat_id = update.message.chat_id
     del user_data[chat_id]
@@ -202,6 +203,16 @@ def extracourse_command(bot, update):
         bot.send_message(chat_id=chat_id, text="获取失败,请先登录 /help")
 
 
+def evaluate_command(bot, update):
+    chat_id = update.message.chat_id
+    try:
+        result = JXPJ(chat_id).evaluate()
+        update.message.reply_text(result)
+    except:
+        update.message.reply_text("操作失败, 请重试")
+
+
+
 def main():
     updater = Updater(TOKEN)
     dispatcher = updater.dispatcher
@@ -212,15 +223,16 @@ def main():
 
     dispatcher.add_handler(CommandHandler('start', help_command))
     dispatcher.add_handler(CommandHandler('help', help_command))
-    dispatcher.add_handler(CommandHandler('regist', regist_command))
-    dispatcher.add_handler(CommandHandler('del', del_command))
-    dispatcher.add_handler(CommandHandler('class', dailyclass_command))
+    dispatcher.add_handler(CommandHandler('login', login_command))
+    dispatcher.add_handler(CommandHandler('logout', logout_command))
+    dispatcher.add_handler(CommandHandler('today', dailyclass_command))
     dispatcher.add_handler(CommandHandler('thisweek', thisweek_command))
     dispatcher.add_handler(CommandHandler('nextweek', nextweek_command))
     dispatcher.add_handler(CommandHandler('tomorrow', tomorrowclass_command))
     dispatcher.add_handler(CommandHandler('week', get_week_num))
     # dispatcher.add_handler(CommandHandler('qqact', qqact_command))
     dispatcher.add_handler(CommandHandler('extracourse', extracourse_command))
+    dispatcher.add_handler(CommandHandler('evaluate', evaluate_command))
 
     updater.start_polling()
     updater.idle()
