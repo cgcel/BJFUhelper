@@ -6,7 +6,7 @@ BJFUhelper是一个Telegram bot, 用于实现一些便捷的查询工作.
 
 现已将原有功能迁移至微信平台.
 
-主要功能信息来源: 
+主要功能信息来源:
 
 - [北林教务系统](http://newjwxt.bjfu.edu.cn/)
 - [青桥网](http://qq.bjfu.edu.cn/)
@@ -14,6 +14,8 @@ BJFUhelper是一个Telegram bot, 用于实现一些便捷的查询工作.
 Telegram id: `@bjfuhelper_bot`
 
 ## Telegram bot 功能及用法:
+
+### 基础功能
 
 - 获取帮助: `/help`
 - 登录教务系统: `/regist` `学号` `密码`
@@ -23,9 +25,12 @@ Telegram id: `@bjfuhelper_bot`
 - 获取本周课表: `/thisweek`
 - 获取下周课表: `/nextweek`
 - 退出登录: `/del`
-- 查看二课堂活动 (测试功能): `/qqact`
 - 查看实验实习安排: `/extracourse`
-- 一键评教: `/evaluate`
+
+### 测试功能
+
+- ~~查看二课堂活动 (测试功能): `/qqact`~~
+- ~~一键评教: `/evaluate`~~
 
 ## Wechat bot 功能及用法:
 
